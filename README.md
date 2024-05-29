@@ -1,7 +1,7 @@
 👨🏻‍💻 grupo01-data-integration-4CCO
 <p>
   
-# Configurando o Repositório Após o Clone Devido ao GIT LFS
+# ⚙️ Configurações Iniciais
 
 <h3>Passo 1: Instalar Git LFS</h3>
 <p>
