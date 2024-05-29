@@ -1,7 +1,6 @@
-# 👨🏻‍💻 grupo01-data-integration-4CCO
-
-Repositório dedicado para o armazenamento do Data Integration do Trabalho de Conclusão de Curso do Grupo 01 da turma 4CCO - 2024 na SPTech.
-
+👨🏻‍💻 grupo01-data-integration-4CCO
+<p>
+  
 # Configurando o Repositório Após o Clone Devido ao GIT LFS
 
 <h3>Passo 1: Instalar Git LFS</h3>
