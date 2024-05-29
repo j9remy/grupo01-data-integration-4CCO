@@ -1,0 +1,2 @@
+TCC_ML/deepfake_vs_real_image_detection/checkpoint-1008/* filter=lfs diff=lfs merge=lfs -text
+TCC_ML/deepfake_vs_real_image_detection/* filter=lfs diff=lfs merge=lfs -text
