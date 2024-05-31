@@ -15,7 +15,9 @@ Primeiro, você precisa ter o Git LFS instalado na sua máquina. Você pode inst
   </li>
   <li>
     <strong>No Linux:</strong><br>
-    Você pode instalar o Git LFS usando seu gerenciador de pacotes preferido. Por exemplo, no Ubuntu:
+    Execute esses 3 passos para não encontrar erros:
+    <pre><code>sudo apt-get install software-properties-common</code></pre>
+    <pre><code>sudo curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash</code></pre>
     <pre><code>sudo apt-get install git-lfs</code></pre>
   </li>
 </ul>
