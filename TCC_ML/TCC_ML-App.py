@@ -7,6 +7,8 @@ from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 
 app = Flask(__name__)
 
+app.run(host='0.0.0.0', port=5000)
+
 # Carregar o modelo salvo e o processador
 model_dir = "deepfake_vs_real_image_detection"
 model = ViTForImageClassification.from_pretrained(model_dir)
