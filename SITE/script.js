@@ -43,7 +43,11 @@ function handleFiles(files) {
     })
     .then(response => response.json())
     .then(data => {
-        displayResults(data);
+        if (data.results && Array.isArray(data.results)) {
+            displayResults(data);
+        } else {
+            console.error('Invalid data format:', data);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -55,7 +59,7 @@ function displayResults(data) {
 
     data.results.forEach((result, index) => {
         const img = document.createElement('img');
-        img.src = URL.createObjectURL(result.image);
+        img.src = URL.createObjectURL(result.image); // Verifique se 'result.image' é uma URL ou base64
         img.classList.add('imagem');
         imageBox.appendChild(img);
 

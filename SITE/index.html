@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultado da Análise</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,12 +21,18 @@
             <h1>Analise sua imagem aqui!</h1>
         </div>
         <div class="image-container">
+            <img src="CAP.png" alt="Sua Imagem" class="imagem"> <!-- Imagem na mesma pasta -->
             <div class="box" id="imageBox">
                 <button id="uploadBtn" class="button">Faça upload</button>
                 <div class="texto-abaixo">Ou arraste uma imagem, cole imagem ou URL</div>
             </div>
         </div>
     </div>
+    <script src="script.js"></script> <!-- O JavaScript está na mesma pasta -->
+
+    <div id="imageBox"></div>
+    <div id="resultContainer"></div>
+
     <script src="script.js"></script>
 </body>
 </html>
