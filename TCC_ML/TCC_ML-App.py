@@ -30,14 +30,20 @@ val_transforms = Compose([
 pipe = model
 
 @app.route('/process_images', methods=['POST'])
-def process_images():
+def process_image():
     files = request.files.getlist('images')
     results = []
-    
+
     for file in files:
         image = Image.open(file).convert("RGB")
+        image_bytes = BytesIO()
+        image.save(image_bytes, format='PNG')
+        encoded_image = base64.b64encode(image_bytes.getvalue()).decode('utf-8')
+
+        # Aplicar transformações
         image_tensor = val_transforms(image).unsqueeze(0)  # Add batch dimension
         
+        # Passar o tensor processado pelo modelo
         with torch.no_grad():
             outputs = pipe(image_tensor)
             logits = outputs.logits
@@ -47,8 +53,9 @@ def process_images():
             result = {labels[i]: confidences[i] for i in range(len(labels))}
             conf_real = result.get('Real', 0)
             conf_fake = result.get('Fake', 0)
-            
+
             results.append({
+                'image': encoded_image,
                 'real_percentage': conf_real * 100,
                 'fake_percentage': conf_fake * 100
             })

@@ -43,73 +43,73 @@ function handleFiles(files) {
     })
     .then(response => response.json())
     .then(data => {
-        displayResults(data.results);
+        displayResults(data);
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
-function displayResults(results) {
+function displayResults(data) {
     imageBox.innerHTML = '';  // Limpa a caixa de imagens
 
-    results.forEach((result, index) => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(result.image); // Certifique-se de que 'result.image' está disponível
-        img.classList.add('imagem');
-        imageBox.appendChild(img);
+    if (data.results) {
+        data.results.forEach((result, index) => {
+            // Criação da imagem a partir da string base64
+            const img = document.createElement('img');
+            img.src = `data:image/png;base64,${result.image}`;
+            img.classList.add('imagem');
+            imageBox.appendChild(img);
 
-        const progressContainer = document.createElement('div');
-        progressContainer.classList.add('progress-container');
+            // Criação das barras de progresso
+            const progressContainer = document.createElement('div');
+            progressContainer.classList.add('progress-container');
 
-        const realProgress = createCircularProgress(result.real_percentage, 'Real');
-        const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
+            const realProgress = createCircularProgress(result.real_percentage, 'Real');
+            const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
 
-        progressContainer.appendChild(realProgress);
-        progressContainer.appendChild(fakeProgress);
+            progressContainer.appendChild(realProgress);
+            progressContainer.appendChild(fakeProgress);
 
-        imageBox.appendChild(progressContainer);
-    });
+            imageBox.appendChild(progressContainer);
+        });
+    } else {
+        console.error('Invalid data format:', data);
+    }
 }
 
 function createCircularProgress(percentage, label) {
     const container = document.createElement('div');
-    container.classList.add('circular-progress');
-
-    const circle = document.createElement('svg');
-    circle.classList.add('circular-chart');
-    circle.setAttribute('viewBox', '0 0 100 100');
-    circle.setAttribute('width', '100');
-    circle.setAttribute('height', '100');
-
-    const circleBg = document.createElement('circle');
-    circleBg.classList.add('circle-bg');
-    circleBg.setAttribute('cx', '50');
-    circleBg.setAttribute('cy', '50');
-    circleBg.setAttribute('r', '45');
-    circleBg.setAttribute('stroke-width', '5');
+    container.classList.add('circular-chart');
     
-    const circleProgress = document.createElement('circle');
-    circleProgress.classList.add('circle');
-    circleProgress.setAttribute('cx', '50');
-    circleProgress.setAttribute('cy', '50');
-    circleProgress.setAttribute('r', '45');
-    circleProgress.setAttribute('stroke-width', '5');
-    circleProgress.style.strokeDasharray = `${percentage} 100`;
-    circleProgress.style.strokeDashoffset = '25'; // Ajuste o deslocamento se necessário
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 100 100");
+    svg.setAttribute("class", "circular-chart");
 
-    const text = document.createElement('text');
-    text.classList.add('percentage');
-    text.setAttribute('x', '50%');
-    text.setAttribute('y', '50%');
-    text.setAttribute('dominant-baseline', 'middle');
-    text.setAttribute('text-anchor', 'middle');
+    const circleBg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circleBg.setAttribute("class", "circle-bg");
+    circleBg.setAttribute("cx", "50");
+    circleBg.setAttribute("cy", "50");
+    circleBg.setAttribute("r", "45");
+    svg.appendChild(circleBg);
+
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("class", "circle");
+    circle.setAttribute("cx", "50");
+    circle.setAttribute("cy", "50");
+    circle.setAttribute("r", "45");
+    circle.setAttribute("stroke-dasharray", `${percentage} 100`);
+    svg.appendChild(circle);
+
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("class", "percentage");
+    text.setAttribute("x", "50");
+    text.setAttribute("y", "50");
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
     text.textContent = `${percentage.toFixed(2)}% ${label}`;
+    svg.appendChild(text);
 
-    circle.appendChild(circleBg);
-    circle.appendChild(circleProgress);
-    circle.appendChild(text);
-
-    container.appendChild(circle);
+    container.appendChild(svg);
     return container;
 }
