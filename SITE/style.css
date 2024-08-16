@@ -214,7 +214,8 @@ button:hover {
 }
 
 .percentage {
-    fill: #333;
+    /* fill: #333; */
+    fill: #ffd700;
     font-family: Arial, sans-serif;
     font-size: 0.2em;
     dominant-baseline: central;
