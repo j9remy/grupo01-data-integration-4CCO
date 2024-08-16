@@ -195,25 +195,22 @@ button:hover {
     height: 100px;
 }
 
-.circle-bg {
+.circle-bg,
+.circle {
     fill: none;
-    stroke: #f0f0f0;  /* Parte não preenchida em cinza */
-    stroke-width: 8;  /* Largura da borda */
+    stroke-width: 10;  /* Ajuste a largura da borda */
+}
+
+.circle-bg {
+    stroke: #f0f0f0;  /* Cor da parte não preenchida em cinza */
 }
 
 .circle {
-    fill: none;
-    stroke-width: 8;  /* Largura da borda */
     stroke-linecap: round;
+    stroke: #4caf50;  /* Cor da parte preenchida (ajuste conforme necessário) */
     transition: stroke-dasharray 1s;
-}
-
-.circular-chart.blue .circle {
-    stroke: #4db8ff;  /* Cor da barra de progresso Real */
-}
-
-.circular-chart.red .circle {
-    stroke: #ff4d4d;  /* Cor da barra de progresso Fake */
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
 }
 
 .percentage {
@@ -221,4 +218,8 @@ button:hover {
     fill: #555;
     text-anchor: middle;
     dominant-baseline: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
