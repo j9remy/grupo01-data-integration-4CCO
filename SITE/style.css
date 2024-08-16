@@ -188,59 +188,24 @@ button:hover {
     }
 }
 
-/*   */
-
-/* ... outros estilos ... */
-
-.circular-progress {
-    display: inline-block;
+/* Novas regras para barras de progresso circular */
+.circular-chart {
     position: relative;
     width: 100px;
     height: 100px;
-    margin: 10px;
 }
 
-.circular-progress .progress {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    clip: rect(0, 100px, 100px, 50px);
-}
-
-.circular-progress .progress .circle-bg {
+.circle-bg {
     stroke: #f0f0f0;
-    stroke-width: 10;
-    fill: none;
 }
 
-.circular-progress .progress .circle {
-    stroke: #4caf50; /* Cor padrão para a barra */
-    stroke-width: 10;
-    stroke-dasharray: 0 100;
-    transition: stroke-dasharray 1s;
-    fill: none;
+.circle {
+    stroke: #4caf50;
     stroke-linecap: round;
+    transition: stroke-dasharray 1s;
 }
 
-.circular-progress .progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    color: #555;
-    text-align: center;
-}
-
-/* Outros estilos */
-
-.button {
-    background-color: #02B676;
-}
-
-.button:hover {
-    background-color: #ffd700;
+.percentage {
+    font-size: 0.5em;
+    fill: #555;
 }

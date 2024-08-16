@@ -1,8 +1,6 @@
-// Certifique-se de que o código é carregado apenas uma vez e não há declarações duplicadas
 const uploadBtn = document.getElementById('uploadBtn');
 const imageBox = document.getElementById('imageBox');
 
-// Adiciona o listener ao botão de upload
 uploadBtn.addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -12,7 +10,6 @@ uploadBtn.addEventListener('click', () => {
     input.click();
 });
 
-// Configura o arrastar e soltar
 imageBox.addEventListener('dragover', (e) => {
     e.preventDefault();
     imageBox.classList.add('dragover');
@@ -46,24 +43,19 @@ function handleFiles(files) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.results && Array.isArray(data.results)) {
-            console.log(data);
-            displayResults(data);
-        } else {
-            console.error('Invalid data format:', data);
-        }
+        displayResults(data.results);
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
-function displayResults(data) {
+function displayResults(results) {
     imageBox.innerHTML = '';  // Limpa a caixa de imagens
 
-    data.results.forEach((result) => {
+    results.forEach((result, index) => {
         const img = document.createElement('img');
-        img.src = result.image; // Verifique se 'result.image' é uma URL ou base64
+        img.src = URL.createObjectURL(result.image); // Certifique-se de que 'result.image' está disponível
         img.classList.add('imagem');
         imageBox.appendChild(img);
 
@@ -84,33 +76,40 @@ function createCircularProgress(percentage, label) {
     const container = document.createElement('div');
     container.classList.add('circular-progress');
 
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100');
-    svg.setAttribute('height', '100');
-    svg.classList.add('circular-chart');
+    const circle = document.createElement('svg');
+    circle.classList.add('circular-chart');
+    circle.setAttribute('viewBox', '0 0 100 100');
+    circle.setAttribute('width', '100');
+    circle.setAttribute('height', '100');
 
-    const circleBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const circleBg = document.createElement('circle');
+    circleBg.classList.add('circle-bg');
     circleBg.setAttribute('cx', '50');
     circleBg.setAttribute('cy', '50');
     circleBg.setAttribute('r', '45');
-    circleBg.classList.add('circle-bg');
+    circleBg.setAttribute('stroke-width', '5');
+    
+    const circleProgress = document.createElement('circle');
+    circleProgress.classList.add('circle');
+    circleProgress.setAttribute('cx', '50');
+    circleProgress.setAttribute('cy', '50');
+    circleProgress.setAttribute('r', '45');
+    circleProgress.setAttribute('stroke-width', '5');
+    circleProgress.style.strokeDasharray = `${percentage} 100`;
+    circleProgress.style.strokeDashoffset = '25'; // Ajuste o deslocamento se necessário
 
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', '50');
-    circle.setAttribute('cy', '50');
-    circle.setAttribute('r', '45');
-    circle.classList.add('circle');
-    circle.style.strokeDasharray = `${percentage} 100`;
-
-    svg.appendChild(circleBg);
-    svg.appendChild(circle);
-
-    const text = document.createElement('span');
-    text.classList.add('progress-text');
+    const text = document.createElement('text');
+    text.classList.add('percentage');
+    text.setAttribute('x', '50%');
+    text.setAttribute('y', '50%');
+    text.setAttribute('dominant-baseline', 'middle');
+    text.setAttribute('text-anchor', 'middle');
     text.textContent = `${percentage.toFixed(2)}% ${label}`;
 
-    container.appendChild(svg);
-    container.appendChild(text);
+    circle.appendChild(circleBg);
+    circle.appendChild(circleProgress);
+    circle.appendChild(text);
 
+    container.appendChild(circle);
     return container;
 }

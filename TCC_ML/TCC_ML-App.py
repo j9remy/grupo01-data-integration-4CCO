@@ -30,27 +30,30 @@ val_transforms = Compose([
 pipe = model
 
 @app.route('/process_images', methods=['POST'])
-def process_image():
-    file = request.files['images']
-    image = Image.open(file).convert("RGB")
+def process_images():
+    files = request.files.getlist('images')
+    results = []
     
-    # Aplicar transformações
-    image_tensor = val_transforms(image).unsqueeze(0)  # Add batch dimension
+    for file in files:
+        image = Image.open(file).convert("RGB")
+        image_tensor = val_transforms(image).unsqueeze(0)  # Add batch dimension
+        
+        with torch.no_grad():
+            outputs = pipe(image_tensor)
+            logits = outputs.logits
+            predictions = torch.nn.functional.softmax(logits, dim=1)
+            confidences = predictions[0].cpu().numpy()
+            labels = model.config.id2label
+            result = {labels[i]: confidences[i] for i in range(len(labels))}
+            conf_real = result.get('Real', 0)
+            conf_fake = result.get('Fake', 0)
+            
+            results.append({
+                'real_percentage': conf_real * 100,
+                'fake_percentage': conf_fake * 100
+            })
     
-    # Passar o tensor processado pelo modelo
-    with torch.no_grad():
-        outputs = pipe(image_tensor)
-        logits = outputs.logits
-        predictions = torch.nn.functional.softmax(logits, dim=1)
-        confidences = predictions[0].cpu().numpy()
-        labels = model.config.id2label
-        result = {labels[i]: confidences[i] for i in range(len(labels))}
-        conf_real = result.get('Real', 0)
-        conf_fake = result.get('Fake', 0)
-        return jsonify({
-            'real_percentage': conf_real * 100,
-            'fake_percentage': conf_fake * 100
-        })
+    return jsonify({'results': results})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
