@@ -188,45 +188,35 @@ button:hover {
     }
 }
 
-/* Barra de Progresso Circular */
-/* Barra de Progresso Circular */
 .circular-chart {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 20px;
+    display: inline-block;
+    max-width: 80px;
+    max-height: 80px;
 }
 
 .circular-chart svg {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    height: auto;
 }
 
 .circle-bg {
-    stroke: #e6e6e6;
-    stroke-width: 10;
+    fill: none;
+    stroke: #eee;
+    stroke-width: 3.8;
 }
 
 .circle {
+    fill: none;
+    stroke-width: 2.8;
     stroke-linecap: round;
-    stroke-width: 10;
     stroke: #4caf50;
-    fill: none; /* Remover o preenchimento */
-    transition: stroke-dasharray 1s;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
+    transition: stroke-dasharray 0.6s ease 0s;
 }
 
 .percentage {
-    font-size: 1.5em; /* Aumentar o tamanho da fonte */
     fill: #333;
-    text-anchor: middle;
-    dominant-baseline: middle;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    font-family: Arial, sans-serif;
+    font-size: 0.5em;
+    dominant-baseline: central;
 }
+

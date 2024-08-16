@@ -82,33 +82,29 @@ function createCircularProgress(percentage, label) {
     const container = document.createElement('div');
     container.classList.add('circular-chart');
 
-    // Criar a barra de progresso completa
+    // Criar o SVG e o círculo de fundo
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('viewBox', '0 0 36 36');
 
-    // Criar o fundo da barra de progresso
-    const circleBg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circleBg.setAttribute('cx', '50');
-    circleBg.setAttribute('cy', '50');
-    circleBg.setAttribute('r', '45');
-    circleBg.classList.add('circle-bg');
+    // Círculo de fundo (background)
+    const circleBg = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    circleBg.setAttribute('class', 'circle-bg');
+    circleBg.setAttribute('d', "M18 2.0845 a 15.9155 15.9155 0 1 0 0.00001 0");
     svg.appendChild(circleBg);
 
-    // Criar a barra de progresso
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute('cx', '50');
-    circle.setAttribute('cy', '50');
-    circle.setAttribute('r', '45');
-    circle.classList.add('circle');
-    circle.setAttribute('stroke-dasharray', `${percentage} 100`);
+    // Círculo de progresso (frontal)
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    circle.setAttribute('class', 'circle');
+    circle.setAttribute('stroke-dasharray', `${percentage}, 100`);
+    circle.setAttribute('d', "M18 2.0845 a 15.9155 15.9155 0 1 0 0.00001 0");
     svg.appendChild(circle);
 
     // Adicionar o texto centralizado
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute('x', '50');
-    text.setAttribute('y', '50');
+    text.setAttribute('x', '18');
+    text.setAttribute('y', '20.35');
     text.setAttribute('class', 'percentage');
-    text.setAttribute('dy', '.3em');
+    text.setAttribute('text-anchor', 'middle');
     text.textContent = `${percentage.toFixed(2)}% ${label}`;
     svg.appendChild(text);
 
@@ -116,5 +112,6 @@ function createCircularProgress(percentage, label) {
 
     return container;
 }
+
 
 
