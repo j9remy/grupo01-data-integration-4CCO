@@ -100,10 +100,7 @@ function createCircularProgress(percentage, label) {
     circle.setAttribute('cy', '50');
     circle.setAttribute('r', '45');
     circle.classList.add('circle');
-    const circumference = 2 * Math.PI * 45;
-    const offset = circumference - (percentage / 100) * circumference;
-    circle.style.strokeDasharray = `${circumference} ${circumference}`;
-    circle.style.strokeDashoffset = offset;
+    circle.setAttribute('stroke-dasharray', `${percentage} 100`);
     svg.appendChild(circle);
 
     // Adicionar o texto centralizado
@@ -119,6 +116,5 @@ function createCircularProgress(percentage, label) {
 
     return container;
 }
-
 
 
