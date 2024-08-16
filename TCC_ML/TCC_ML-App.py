@@ -1,14 +1,11 @@
-import warnings
-warnings.filterwarnings("ignore")
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from transformers import ViTForImageClassification, ViTImageProcessor, pipeline
-import torch
-from torchvision.transforms import Normalize, Resize, ToTensor, Compose
+from flask import Flask, request, jsonify
 from PIL import Image
-import streamlit as st
+import io
+import torch
+from transformers import ViTForImageClassification, ViTImageProcessor, pipeline
+from torchvision.transforms import Normalize, Resize, ToTensor, Compose
+
+app = Flask(__name__)
 
 # Carregar o modelo salvo e o processador
 model_dir = "deepfake_vs_real_image_detection"
@@ -29,37 +26,23 @@ val_transforms = Compose([
 # Criação do pipeline para classificação de imagens
 pipe = pipeline('image-classification', model=model, feature_extractor=processor, device=-1)
 
-# Função para exibir a imagem com o resultado da classificação
-def show_image_with_result(image, result):
-    confidences = {res['label']: res['score'] for res in result}
-    conf_real = confidences.get('Real', 0)
-    conf_fake = confidences.get('Fake', 0)
-    
-    plt.imshow(image)
-    plt.title(f"Predição: {result[0]['label']}\n\nConfiança Real: {conf_real:.2f}\nConfiança Fake: {conf_fake:.2f}")
-    plt.axis('off')
-    st.pyplot(plt.gcf())
-    plt.clf()
+@app.route('/process_image', methods=['POST'])
+def process_image():
+    image_file = request.files['image']
+    image = Image.open(io.BytesIO(image_file.read())).convert('RGB')
 
-# Função principal para processar a imagem
-def process_image(image_file):
-    image = Image.open(image_file).convert("RGB")
+    # Aplicar as transformações na imagem
     image_tensor = val_transforms(image)
+
+    # Executar a classificação
     result = pipe(image)
-    return image, result
 
-# Configuração da interface do Streamlit
-st.header('Análise percentual do uso de IA na sua imagem')
+    # Extrair as porcentagens
+    confidences = {res['label']: res['score'] for res in result}
+    conf_real = confidences.get('Real', 0) * 100
+    conf_fake = confidences.get('Fake', 0) * 100
 
-images = st.file_uploader('Insira sua imagem', type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+    return jsonify({'real_percentage': conf_real, 'fake_percentage': conf_fake})
 
-if images:
-    for image_file in images:
-        image, result = process_image(image_file)
-        confidences = {res['label']: res['score'] for res in result}
-        conf_real = confidences.get('Real', 0)
-        conf_fake = confidences.get('Fake', 0)
-        st.image(image=image, caption=image_file.name, width=300)
-        st.success(f'{conf_real * 100:.2f}% da imagem não apresenta uso de IA')
-        st.error(f'{conf_fake * 100:.2f}% da imagem apresenta uso de IA')
-        st.markdown('---')
+if __name__ == "__main__":
+    app.run(debug=True)
