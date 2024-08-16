@@ -1,6 +1,8 @@
+// Certifique-se de que o código é carregado apenas uma vez e não há declarações duplicadas
 const uploadBtn = document.getElementById('uploadBtn');
 const imageBox = document.getElementById('imageBox');
 
+// Adiciona o listener ao botão de upload
 uploadBtn.addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -10,6 +12,7 @@ uploadBtn.addEventListener('click', () => {
     input.click();
 });
 
+// Configura o arrastar e soltar
 imageBox.addEventListener('dragover', (e) => {
     e.preventDefault();
     imageBox.classList.add('dragover');
@@ -44,6 +47,7 @@ function handleFiles(files) {
     .then(response => response.json())
     .then(data => {
         if (data.results && Array.isArray(data.results)) {
+            console.log(data);
             displayResults(data);
         } else {
             console.error('Invalid data format:', data);
@@ -57,9 +61,9 @@ function handleFiles(files) {
 function displayResults(data) {
     imageBox.innerHTML = '';  // Limpa a caixa de imagens
 
-    data.results.forEach((result, index) => {
+    data.results.forEach((result) => {
         const img = document.createElement('img');
-        img.src = URL.createObjectURL(result.image); // Verifique se 'result.image' é uma URL ou base64
+        img.src = result.image; // Verifique se 'result.image' é uma URL ou base64
         img.classList.add('imagem');
         imageBox.appendChild(img);
 
@@ -80,32 +84,32 @@ function createCircularProgress(percentage, label) {
     const container = document.createElement('div');
     container.classList.add('circular-progress');
 
-    const circleBg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    circleBg.setAttribute('width', '100');
-    circleBg.setAttribute('height', '100');
-    circleBg.classList.add('progress');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100');
+    svg.setAttribute('height', '100');
+    svg.classList.add('circular-chart');
 
-    const circleBgPath = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circleBgPath.setAttribute('cx', '50');
-    circleBgPath.setAttribute('cy', '50');
-    circleBgPath.setAttribute('r', '45');
-    circleBgPath.classList.add('circle-bg');
+    const circleBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circleBg.setAttribute('cx', '50');
+    circleBg.setAttribute('cy', '50');
+    circleBg.setAttribute('r', '45');
+    circleBg.classList.add('circle-bg');
 
-    const circlePath = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circlePath.setAttribute('cx', '50');
-    circlePath.setAttribute('cy', '50');
-    circlePath.setAttribute('r', '45');
-    circlePath.classList.add('circle');
-    circlePath.style.strokeDasharray = `${percentage} 100`;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '50');
+    circle.setAttribute('cy', '50');
+    circle.setAttribute('r', '45');
+    circle.classList.add('circle');
+    circle.style.strokeDasharray = `${percentage} 100`;
 
-    circleBg.appendChild(circleBgPath);
-    circleBg.appendChild(circlePath);
+    svg.appendChild(circleBg);
+    svg.appendChild(circle);
 
     const text = document.createElement('span');
     text.classList.add('progress-text');
     text.textContent = `${percentage.toFixed(2)}% ${label}`;
 
-    container.appendChild(circleBg);
+    container.appendChild(svg);
     container.appendChild(text);
 
     return container;
