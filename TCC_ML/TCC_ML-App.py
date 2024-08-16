@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Importa o CORS
 from PIL import Image
 import io
 import numpy as np
@@ -7,6 +8,7 @@ from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 import torch
 
 app = Flask(__name__)
+CORS(app)  # Habilita CORS para todas as rotas
 
 # Carregar o modelo salvo e o processador
 model_dir = "deepfake_vs_real_image_detection"
@@ -24,14 +26,18 @@ val_transforms = Compose([
     normalize
 ])
 
-# Criação do pipeline para classificação de imagens
-pipe = torch.nn.Sequential(model, processor)
+# Definição do modelo
+pipe = model
 
 @app.route('/process_image', methods=['POST'])
 def process_image():
     file = request.files['image']
     image = Image.open(file).convert("RGB")
+    
+    # Aplicar transformações
     image_tensor = val_transforms(image).unsqueeze(0)  # Add batch dimension
+    
+    # Passar o tensor processado pelo modelo
     with torch.no_grad():
         outputs = pipe(image_tensor)
         logits = outputs.logits
@@ -48,3 +54,4 @@ def process_image():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
