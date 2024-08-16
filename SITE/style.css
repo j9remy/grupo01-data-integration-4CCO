@@ -190,8 +190,8 @@ button:hover {
 
 .circular-chart {
     display: inline-block;
-    max-width: 80px;
-    max-height: 80px;
+    max-width: 120px;
+    max-height: 120px;
 }
 
 .circular-chart svg {
@@ -216,7 +216,7 @@ button:hover {
 .percentage {
     fill: #333;
     font-family: Arial, sans-serif;
-    font-size: 0.5em;
+    font-size: 0.2em;
     dominant-baseline: central;
 }
 
