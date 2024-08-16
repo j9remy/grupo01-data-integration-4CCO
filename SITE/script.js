@@ -117,3 +117,4 @@ function createCircularProgress(percentage, label) {
     return container;
 }
 
+
