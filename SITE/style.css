@@ -189,33 +189,37 @@ button:hover {
 }
 
 /* Barra de Progresso Circular */
+/* Barra de Progresso Circular */
 .circular-chart {
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 120px; /* Aumentei um pouco o tamanho */
+    height: 120px;
+    margin: 20px;
 }
 
-.circle-bg,
-.circle {
-    fill: none;
-    stroke-width: 10;  /* Ajuste a largura da borda */
+.circular-chart svg {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .circle-bg {
-    stroke: #f0f0f0;  /* Cor da parte não preenchida em cinza */
+    stroke: #e6e6e6; /* Fundo mais claro */
+    stroke-width: 10;
 }
 
 .circle {
     stroke-linecap: round;
-    stroke: #4caf50;  /* Cor da parte preenchida (ajuste conforme necessário) */
+    stroke-width: 10;
+    stroke: #4caf50; /* Verde padrão */
     transition: stroke-dasharray 1s;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
 }
 
 .percentage {
-    font-size: 0.5em;
-    fill: #555;
+    font-size: 1em;
+    fill: #333;
     text-anchor: middle;
     dominant-baseline: middle;
     position: absolute;
