@@ -216,7 +216,16 @@ button:hover {
 .percentage {
     fill: #333;
     font-family: Arial, sans-serif;
-    font-size: 0.5em;
+    font-size: 0.4em;
     dominant-baseline: central;
+}
+
+
+
+.label-text {
+    margin-top: 10px; /* Espaço entre o gráfico e o rótulo */
+    font-size: 1.2em; /* Tamanho da fonte para o rótulo */
+    color: #333; /* Cor do texto do rótulo */
+    text-align: center;
 }
 

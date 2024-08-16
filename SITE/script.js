@@ -65,8 +65,8 @@ function displayResults(data) {
             const progressContainer = document.createElement('div');
             progressContainer.classList.add('progress-container');
 
-            const realProgress = createCircularProgress(result.real_percentage, 'Real');
-            const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
+            const realProgress = createCircularProgress(result.real_percentage);
+            const fakeProgress = createCircularProgress(result.fake_percentage);
 
             progressContainer.appendChild(realProgress);
             progressContainer.appendChild(fakeProgress);
@@ -116,6 +116,11 @@ function createCircularProgress(percentage, label) {
     svg.appendChild(text);
 
     container.appendChild(svg);
+
+    const labelText = document.createElement('div');
+    labelText.textContent = label;
+    labelText.classList.add('label-text'); // Adiciona uma classe para o rótulo
+    container.appendChild(labelText);
 
     return container;
 }
