@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # Importa o CORS
 from PIL import Image
 import io
+import base64
+from io import BytesIO
 import numpy as np
 from transformers import ViTForImageClassification, ViTImageProcessor
 from torchvision.transforms import Normalize, Resize, ToTensor, Compose
