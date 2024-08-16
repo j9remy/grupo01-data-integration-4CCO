@@ -188,7 +188,7 @@ button:hover {
     }
 }
 
-/* Novas regras para barras de progresso circular */
+/* Barra de Progresso Circular */
 .circular-chart {
     position: relative;
     width: 100px;
@@ -196,16 +196,29 @@ button:hover {
 }
 
 .circle-bg {
-    stroke: #f0f0f0;
+    fill: none;
+    stroke: #f0f0f0;  /* Parte não preenchida em cinza */
+    stroke-width: 8;  /* Largura da borda */
 }
 
 .circle {
-    stroke: #4caf50;
+    fill: none;
+    stroke-width: 8;  /* Largura da borda */
     stroke-linecap: round;
     transition: stroke-dasharray 1s;
+}
+
+.circular-chart.blue .circle {
+    stroke: #4db8ff;  /* Cor da barra de progresso Real */
+}
+
+.circular-chart.red .circle {
+    stroke: #ff4d4d;  /* Cor da barra de progresso Fake */
 }
 
 .percentage {
     font-size: 0.5em;
     fill: #555;
+    text-anchor: middle;
+    dominant-baseline: middle;
 }

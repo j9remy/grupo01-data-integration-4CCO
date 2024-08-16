@@ -81,35 +81,48 @@ function displayResults(data) {
 function createCircularProgress(percentage, label) {
     const container = document.createElement('div');
     container.classList.add('circular-chart');
-    
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 100 100");
-    svg.setAttribute("class", "circular-chart");
 
-    const circleBg = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circleBg.setAttribute("class", "circle-bg");
-    circleBg.setAttribute("cx", "50");
-    circleBg.setAttribute("cy", "50");
-    circleBg.setAttribute("r", "45");
-    svg.appendChild(circleBg);
+    // Criar o fundo da barra de progresso
+    const circleBg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    circleBg.setAttribute('viewBox', '0 0 100 100');
+    circleBg.classList.add('circle-bg');
 
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("class", "circle");
-    circle.setAttribute("cx", "50");
-    circle.setAttribute("cy", "50");
-    circle.setAttribute("r", "45");
-    circle.setAttribute("stroke-dasharray", `${percentage} 100`);
-    svg.appendChild(circle);
+    const circleBgPath = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circleBgPath.setAttribute('cx', '50');
+    circleBgPath.setAttribute('cy', '50');
+    circleBgPath.setAttribute('r', '45');
+    circleBgPath.setAttribute('stroke', '#f0f0f0');
+    circleBgPath.setAttribute('stroke-width', '8');
+    circleBgPath.setAttribute('fill', 'none');
+    circleBg.appendChild(circleBgPath);
+    container.appendChild(circleBg);
 
+    // Criar a barra de progresso
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    circle.setAttribute('viewBox', '0 0 100 100');
+    circle.classList.add('circle');
+
+    const circlePath = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circlePath.setAttribute('cx', '50');
+    circlePath.setAttribute('cy', '50');
+    circlePath.setAttribute('r', '45');
+    circlePath.setAttribute('stroke', '#4caf50');  // Cor da progressão
+    circlePath.setAttribute('stroke-width', '8');
+    circlePath.setAttribute('stroke-linecap', 'round');
+    circlePath.setAttribute('fill', 'none');
+    circlePath.setAttribute('stroke-dasharray', `${percentage} 100`);
+    circle.appendChild(circlePath);
+    container.appendChild(circle);
+
+    // Adicionar o texto centralizado
     const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    text.setAttribute("class", "percentage");
-    text.setAttribute("x", "50");
-    text.setAttribute("y", "50");
-    text.setAttribute("text-anchor", "middle");
-    text.setAttribute("dominant-baseline", "middle");
+    text.setAttribute('x', '50');
+    text.setAttribute('y', '50');
+    text.setAttribute('class', 'percentage');
+    text.setAttribute('dy', '.3em');  // Ajustar a posição vertical do texto
     text.textContent = `${percentage.toFixed(2)}% ${label}`;
-    svg.appendChild(text);
+    container.appendChild(text);
 
-    container.appendChild(svg);
     return container;
 }
+
