@@ -31,7 +31,7 @@ pipe = model
 
 @app.route('/process_images', methods=['POST'])
 def process_image():
-    file = request.files['image']
+    file = request.files['images']
     image = Image.open(file).convert("RGB")
     
     # Aplicar transformações
