@@ -1,11 +1,11 @@
 const uploadBtn = document.getElementById('uploadBtn');
 const imageBox = document.getElementById('imageBox');
-let currentFile = null; // Adicionando uma variável para armazenar o arquivo atual
 
 uploadBtn.addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
+    input.multiple = true;  // Permite selecionar múltiplos arquivos
     input.onchange = handleFileSelect;
     input.click();
 });
@@ -22,57 +22,76 @@ imageBox.addEventListener('dragleave', () => {
 imageBox.addEventListener('drop', (e) => {
     e.preventDefault();
     imageBox.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    currentFile = file; // Armazena o arquivo atual
-    handleFile(file);
+    const files = e.dataTransfer.files;
+    handleFiles(files);
 });
 
 function handleFileSelect(e) {
-    const file = e.target.files[0];
-    currentFile = file; // Armazena o arquivo atual
-    handleFile(file);
+    const files = e.target.files;
+    handleFiles(files);
 }
 
-function handleFile(file) {
+function handleFiles(files) {
     const formData = new FormData();
-    formData.append('image', file);
+    for (const file of files) {
+        formData.append('images', file);
+    }
 
-    fetch('http://44.210.55.160:5000/process_image', {
+    fetch('http://44.210.55.160:5000/process_images', {
         method: 'POST',
         body: formData
     })
     .then(response => response.json())
     .then(data => {
-        displayResult(data); // Passa os dados para a função displayResult
+        displayResults(data);
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
 
-function displayResult(data) {
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(currentFile); // Usa a variável currentFile
-    img.classList.add('imagem');
-    imageBox.innerHTML = '';
-    imageBox.appendChild(img);
+function displayResults(data) {
+    imageBox.innerHTML = '';  // Limpa a caixa de imagens
 
-    const confirmBtn = document.createElement('button');
-    confirmBtn.textContent = 'Ver Resultado';
-    confirmBtn.classList.add('button');
-    confirmBtn.style.marginTop = '10px';
-    confirmBtn.onclick = () => {
-        showPopup(data.real_percentage, data.fake_percentage);
-    };
-    imageBox.appendChild(confirmBtn);
+    data.results.forEach((result, index) => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(result.image);
+        img.classList.add('imagem');
+        imageBox.appendChild(img);
 
-    const closeBtn = document.createElement('span');
-    closeBtn.innerHTML = '&times;';
-    closeBtn.classList.add('close-btn');
-    closeBtn.onclick = () => {
-        window.location.reload();
-    };
-    imageBox.appendChild(closeBtn);
+        const progressContainer = document.createElement('div');
+        progressContainer.classList.add('progress-container');
+
+        const realProgress = createCircularProgress(result.real_percentage, 'Real');
+        const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
+
+        progressContainer.appendChild(realProgress);
+        progressContainer.appendChild(fakeProgress);
+
+        imageBox.appendChild(progressContainer);
+    });
+}
+
+function createCircularProgress(percentage, label) {
+    const container = document.createElement('div');
+    container.classList.add('circular-progress');
+
+    const circle = document.createElement('div');
+    circle.classList.add('circle');
+    
+    const progress = document.createElement('div');
+    progress.classList.add('progress');
+    progress.style.strokeDasharray = `${percentage} 100`;
+
+    const text = document.createElement('span');
+    text.classList.add('progress-text');
+    text.textContent = `${percentage.toFixed(2)}% ${label}`;
+
+    circle.appendChild(progress);
+    container.appendChild(circle);
+    container.appendChild(text);
+
+    return container;
 }
 
 function showPopup(percentageReal, percentageFake) {
@@ -93,30 +112,80 @@ function showPopup(percentageReal, percentageFake) {
     title.textContent = 'Resultado da Análise';
     content.appendChild(title);
 
-    const barReal = document.createElement('div');
-    barReal.classList.add('bar');
-    const barFillReal = document.createElement('div');
-    barFillReal.classList.add('bar-fill');
-    barFillReal.style.width = `${percentageReal}%`;
-    barReal.appendChild(barFillReal);
-    const textReal = document.createElement('span');
-    textReal.classList.add('bar-text');
-    textReal.textContent = `${percentageReal}% Real`;
-    barReal.appendChild(textReal);
+    // Cria os contêineres para os gráficos
+    const realChartContainer = document.createElement('div');
+    realChartContainer.classList.add('chart-container');
+    const fakeChartContainer = document.createElement('div');
+    fakeChartContainer.classList.add('chart-container');
 
-    const barFake = document.createElement('div');
-    barFake.classList.add('bar');
-    const barFillFake = document.createElement('div');
-    barFillFake.classList.add('bar-fill');
-    barFillFake.style.width = `${percentageFake}%`;
-    barFake.appendChild(barFillFake);
-    const textFake = document.createElement('span');
-    textFake.classList.add('bar-text');
-    textFake.textContent = `${percentageFake}% Fake`;
-    barFake.appendChild(textFake);
+    content.appendChild(realChartContainer);
+    content.appendChild(fakeChartContainer);
 
-    content.appendChild(barReal);
-    content.appendChild(barFake);
+    // Cria o gráfico circular para "Real"
+    new Chart(realChartContainer, {
+        type: 'doughnut',
+        data: {
+            labels: ['Real', 'Fake'],
+            datasets: [{
+                data: [percentageReal, 100 - percentageReal],
+                backgroundColor: ['#4caf50', '#e0e0e0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            circumference: Math.PI,
+            rotation: -Math.PI,
+            cutout: '80%',
+            plugins: {
+                tooltip: {
+                    enabled: false
+                },
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    display: true,
+                    color: '#000',
+                    formatter: (value, ctx) => {
+                        return value === 0 ? '' : `${Math.round(value)}%`;
+                    }
+                }
+            }
+        }
+    });
+
+    // Cria o gráfico circular para "Fake"
+    new Chart(fakeChartContainer, {
+        type: 'doughnut',
+        data: {
+            labels: ['Fake', 'Real'],
+            datasets: [{
+                data: [percentageFake, 100 - percentageFake],
+                backgroundColor: ['#f44336', '#e0e0e0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            circumference: Math.PI,
+            rotation: -Math.PI,
+            cutout: '80%',
+            plugins: {
+                tooltip: {
+                    enabled: false
+                },
+                legend: {
+                    display: false
+                },
+                datalabels: {
+                    display: true,
+                    color: '#000',
+                    formatter: (value, ctx) => {
+                        return value === 0 ? '' : `${Math.round(value)}%`;
+                    }
+                }
+            }
+        }
+    });
 
     const closeButton = document.createElement('span');
     closeButton.classList.add('close-btn-popup');
@@ -130,8 +199,3 @@ function showPopup(percentageReal, percentageFake) {
     popup.appendChild(content);
     document.body.appendChild(popup);
 }
-
-document.querySelector('.menu-hamburger').addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.toggle('show');
-});
-
