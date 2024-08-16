@@ -97,6 +97,13 @@ function createCircularProgress(percentage, label) {
     circle.setAttribute('class', 'circle');
     circle.setAttribute('stroke-dasharray', `${percentage}, 100`);
     circle.setAttribute('d', "M18 2.0845 a 15.9155 15.9155 0 1 0 0.00001 0");
+
+    if (label === 'Fake') {
+        circle.setAttribute('stroke', 'red');  // Cor para "Fake"
+    } else {
+        circle.setAttribute('stroke', '#4caf50');  // Cor para "Real" (mantendo verde)
+    }
+
     svg.appendChild(circle);
 
     // Adicionar o texto centralizado
