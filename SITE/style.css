@@ -188,8 +188,6 @@ button:hover {
     }
 }
 
-/* Barra de Progresso Circular */
-/* Barra de Progresso Circular */
 .circular-chart {
     position: relative;
     width: 120px;
@@ -225,8 +223,5 @@ button:hover {
     fill: #333;
     text-anchor: middle;
     dominant-baseline: middle;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
+
