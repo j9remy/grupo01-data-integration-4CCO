@@ -1,14 +1,13 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Importa o CORS
+from flask_cors import CORS
 from PIL import Image
 import io
-import numpy as np
-from transformers import ViTForImageClassification, ViTImageProcessor
-from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 import torch
+from transformers import ViTForImageClassification, ViTImageProcessor, pipeline
+from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 
 app = Flask(__name__)
-CORS(app)  # Habilita CORS para todas as rotas
+CORS(app)
 
 # Carregar o modelo salvo e o processador
 model_dir = "deepfake_vs_real_image_detection"
@@ -26,32 +25,26 @@ val_transforms = Compose([
     normalize
 ])
 
-# Definição do modelo
-pipe = model
+# Criação do pipeline para classificação de imagens
+pipe = pipeline('image-classification', model=model, feature_extractor=processor, device=-1)
 
 @app.route('/process_image', methods=['POST'])
 def process_image():
-    file = request.files['image']
-    image = Image.open(file).convert("RGB")
-    
-    # Aplicar transformações
-    image_tensor = val_transforms(image).unsqueeze(0)  # Add batch dimension
-    
-    # Passar o tensor processado pelo modelo
-    with torch.no_grad():
-        outputs = pipe(image_tensor)
-        logits = outputs.logits
-        predictions = torch.nn.functional.softmax(logits, dim=1)
-        confidences = predictions[0].cpu().numpy()
-        labels = model.config.id2label
-        result = {labels[i]: confidences[i] for i in range(len(labels))}
-        conf_real = result.get('Real', 0)
-        conf_fake = result.get('Fake', 0)
-        return jsonify({
-            'real_percentage': conf_real * 100,
-            'fake_percentage': conf_fake * 100
-        })
+    image_file = request.files['image']
+    image = Image.open(io.BytesIO(image_file.read())).convert('RGB')
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Aplicar as transformações na imagem
+    image_tensor = val_transforms(image)
 
+    # Executar a classificação
+    result = pipe(image)
+
+    # Extrair as porcentagens
+    confidences = {res['label']: res['score'] for res in result}
+    conf_real = confidences.get('Real', 0) * 100
+    conf_fake = confidences.get('Fake', 0) * 100
+
+    return jsonify({'real_percentage': conf_real, 'fake_percentage': conf_fake})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
