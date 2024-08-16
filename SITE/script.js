@@ -37,7 +37,7 @@ function handleFiles(files) {
         formData.append('images', file);
     }
 
-    fetch('http://44.210.55.160:5000/process_images', {
+    fetch('http://44.210.55.160:5000/process_image', {
         method: 'POST',
         body: formData
     })
