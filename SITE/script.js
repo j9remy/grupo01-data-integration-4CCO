@@ -1,5 +1,6 @@
 const uploadBtn = document.getElementById('uploadBtn');
 const imageBox = document.getElementById('imageBox');
+let currentFile = null; // Adicionando uma variável para armazenar o arquivo atual
 
 uploadBtn.addEventListener('click', () => {
     const input = document.createElement('input');
@@ -22,11 +23,13 @@ imageBox.addEventListener('drop', (e) => {
     e.preventDefault();
     imageBox.classList.remove('dragover');
     const file = e.dataTransfer.files[0];
+    currentFile = file; // Armazena o arquivo atual
     handleFile(file);
 });
 
 function handleFileSelect(e) {
     const file = e.target.files[0];
+    currentFile = file; // Armazena o arquivo atual
     handleFile(file);
 }
 
@@ -34,13 +37,13 @@ function handleFile(file) {
     const formData = new FormData();
     formData.append('image', file);
 
-    fetch('http://localhost:5000/process_image', {
+    fetch('http://44.210.55.160:5000/process_image', {
         method: 'POST',
         body: formData
     })
     .then(response => response.json())
     .then(data => {
-        displayResult(data);
+        displayResult(data); // Passa os dados para a função displayResult
     })
     .catch(error => {
         console.error('Error:', error);
@@ -49,7 +52,7 @@ function handleFile(file) {
 
 function displayResult(data) {
     const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
+    img.src = URL.createObjectURL(currentFile); // Usa a variável currentFile
     img.classList.add('imagem');
     imageBox.innerHTML = '';
     imageBox.appendChild(img);
@@ -131,3 +134,4 @@ function showPopup(percentageReal, percentageFake) {
 document.querySelector('.menu-hamburger').addEventListener('click', () => {
     document.querySelector('.nav-links').classList.toggle('show');
 });
+

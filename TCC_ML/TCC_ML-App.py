@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from PIL import Image
 import io
 import torch
@@ -6,8 +7,7 @@ from transformers import ViTForImageClassification, ViTImageProcessor, pipeline
 from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 
 app = Flask(__name__)
-
-app.run(host='0.0.0.0', port=5000)
+CORS(app)
 
 # Carregar o modelo salvo e o processador
 model_dir = "deepfake_vs_real_image_detection"
@@ -47,4 +47,4 @@ def process_image():
     return jsonify({'real_percentage': conf_real, 'fake_percentage': conf_fake})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
