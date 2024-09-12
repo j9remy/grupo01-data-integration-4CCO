@@ -56,22 +56,36 @@ function displayResults(data) {
     if (data.results) {
         data.results.forEach((result, index) => {
             // Criação da imagem a partir da string base64
-            const img = document.createElement('img');
-            img.src = `data:image/png;base64,${result.image}`;
-            img.classList.add('imagem');
-            imageBox.appendChild(img);
+            if (result.contains_face){
+                const img = document.createElement('img');
+                img.src = `data:image/png;base64,${result.image}`;
+                img.classList.add('imagem');
+                imageBox.appendChild(img);
+    
+                // Criação das barras de progresso
+                const progressContainer = document.createElement('div');
+                progressContainer.classList.add('progress-container');
+    
+                const realProgress = createCircularProgress(result.real_percentage, 'Real');
+                const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
+    
+                progressContainer.appendChild(realProgress);
+                progressContainer.appendChild(fakeProgress);
+    
+                imageBox.appendChild(progressContainer);
+            } else {
+                const img = document.createElement('img');
+                img.src = `data:image/png;base64,${result.image}`;
+                img.classList.add('imagem');
+                imageBox.appendChild(img);
 
-            // Criação das barras de progresso
-            const progressContainer = document.createElement('div');
-            progressContainer.classList.add('progress-container');
+                const notFaceContainer = document.createElement('div');
 
-            const realProgress = createCircularProgress(result.real_percentage, 'Real');
-            const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
-
-            progressContainer.appendChild(realProgress);
-            progressContainer.appendChild(fakeProgress);
-
-            imageBox.appendChild(progressContainer);
+                notFaceContainer.textContent = "Nenhuma face foi detectada na imagem.";
+    
+                imageBox.appendChild(notFaceContainer);
+            }
+            
         });
     } else {
         console.error('Invalid data format:', data);

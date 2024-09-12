@@ -31,6 +31,19 @@ val_transforms = Compose([
 # Definição do modelo
 pipe = model
 
+def contains_face(image):
+    # Carregar o classificador de detecção de face pré-treinado do OpenCV
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    
+    # Converter a imagem de RGB para escala de cinza
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Detectar rostos na imagem
+    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    
+    # Se a lista de faces detectadas não estiver vazia, significa que a imagem contém uma face
+    return len(faces) > 0
+
 @app.route('/process_images', methods=['POST'])
 def process_image():
     files = request.files.getlist('images')
@@ -47,20 +60,30 @@ def process_image():
         
         # Passar o tensor processado pelo modelo
         with torch.no_grad():
-            outputs = pipe(image_tensor)
-            logits = outputs.logits
-            predictions = torch.nn.functional.softmax(logits, dim=1)
-            confidences = predictions[0].cpu().numpy()
-            labels = model.config.id2label
-            result = {labels[i]: confidences[i] for i in range(len(labels))}
-            conf_real = result.get('Real', 0)
-            conf_fake = result.get('Fake', 0)
 
-            results.append({
-                'image': encoded_image,
-                'real_percentage': conf_real * 100,
-                'fake_percentage': conf_fake * 100
-            })
+            if contains_face(image_cv):
+                outputs = pipe(image_tensor)
+                logits = outputs.logits
+                predictions = torch.nn.functional.softmax(logits, dim=1)
+                confidences = predictions[0].cpu().numpy()
+                labels = model.config.id2label
+                result = {labels[i]: confidences[i] for i in range(len(labels))}
+                conf_real = result.get('Real', 0)
+                conf_fake = result.get('Fake', 0)
+                results.append({
+                    'image': encoded_image,
+                    'real_percentage': conf_real * 100,
+                    'fake_percentage': conf_fake * 100,
+                    'contains_face': True
+                })
+
+            else:
+                results.append({
+                    'image': encoded_image,
+                    'real_percentage': conf_real * 100,
+                    'fake_percentage': conf_fake * 100,
+                    'contains_face': False
+                })
     
     return jsonify({'results': results})
 
