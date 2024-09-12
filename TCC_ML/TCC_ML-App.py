@@ -63,10 +63,12 @@ def contains_face(image):
     # Percorrer todas as detecções
     for i in range(0, detections.shape[2]):
         # Extrair a confiança (probabilidade associada à detecção)
-        confiança = detections[0, 0, i, 2]
+        confianca = detections[0, 0, i, 2]
+
+        print(confianca)
         
-        # Considerar detecções com confiança maior que 0.5
-        if confiança > 0.5:
+        # Considerar detecções com confianca maior que 0.5
+        if confianca > 0.5:
             # Computar as coordenadas da caixa delimitadora do rosto
             box = detections[0, 0, i, 3:7] * [w, h, w, h]
             (startX, startY, endX, endY) = box.astype("int")
