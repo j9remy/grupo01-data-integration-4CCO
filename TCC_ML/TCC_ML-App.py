@@ -35,23 +35,43 @@ val_transforms = Compose([
 pipe = model
 
 def contains_face(image):
-    # Carregar o modelo pré-treinado de detecção de rosto DNN do OpenCV
-    net = cv2.dnn.readNetFromCaffe(cv2.data.dnn + 'deploy.prototxt', cv2.data.dnn + 'res10_300x300_ssd_iter_140000.caffemodel')
+    # Carregar o modelo de detecção de rosto (deep learning)
+    prototxt_path = cv2.data.haarcascades + "deploy.prototxt"
+    model_path = cv2.data.haarcascades + "res10_300x300_ssd_iter_140000.caffemodel"
+    net = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
     
-    # Converter a imagem para o formato que o modelo espera
-    (h, w) = image.shape[:2]
-    blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
+    # Carregar a imagem
+    imagem = cv2.imread(caminho_imagem)
     
-    # Passar a imagem pela rede
+    if imagem is None:
+        print("Erro ao carregar a imagem.")
+        return False
+    
+    # Obter as dimensões da imagem
+    (h, w) = imagem.shape[:2]
+    
+    # Pré-processar a imagem: redimensionar para 300x300 e normalizar
+    blob = cv2.dnn.blobFromImage(imagem, 1.0, (300, 300), (104.0, 177.0, 123.0))
+    
+    # Passar o blob pela rede para obter detecções
     net.setInput(blob)
     detections = net.forward()
     
-    # Verificar se algum rosto foi detectado
+    # Percorrer todas as detecções
     for i in range(0, detections.shape[2]):
-        confidence = detections[0, 0, i, 2]
-        if confidence > 0.5:  # Ajuste o limite de confiança conforme necessário
+        # Extrair a confiança (probabilidade associada à detecção)
+        confiança = detections[0, 0, i, 2]
+        
+        # Considerar detecções com confiança maior que 0.5
+        if confiança > 0.5:
+            # Computar as coordenadas da caixa delimitadora do rosto
+            box = detections[0, 0, i, 3:7] * [w, h, w, h]
+            (startX, startY, endX, endY) = box.astype("int")
+            
+            # Se houver um rosto detectado, retornar True
             return True
     
+    # Se nenhum rosto foi detectado, retornar False
     return False
 
 @app.route('/process_images', methods=['POST'])
