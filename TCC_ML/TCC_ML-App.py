@@ -36,7 +36,7 @@ pipe = model
 
 def contains_face(image):
     # Carregar o modelo de detecção de rosto (deep learning)
-    proto_file = 'MobileNetSSD_deploy.prototxt.txt'
+    proto_file = 'MobileNetSSD_deploy.prototxt'
     model_file = 'MobileNetSSD_deploy.caffemodel'
     net = cv2.dnn.readNetFromCaffe(proto_file, model_file)
     
