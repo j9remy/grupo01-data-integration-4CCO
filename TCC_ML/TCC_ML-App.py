@@ -64,6 +64,9 @@ def process_image():
         # Passar o tensor processado pelo modelo
         with torch.no_grad():
 
+            image_cv = np.array(image)
+            image_cv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
+
             if contains_face(image_cv):
                 outputs = pipe(image_tensor)
                 logits = outputs.logits
