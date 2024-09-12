@@ -41,7 +41,7 @@ def contains_face(image):
     net = cv2.dnn.readNetFromCaffe(proto_file, model_file)
     
     # Carregar a imagem
-    imagem = cv2.imread(image)
+    imagem = image
     
     if imagem is None:
         print("Erro ao carregar a imagem.")
