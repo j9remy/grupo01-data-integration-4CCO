@@ -65,7 +65,8 @@ def contains_face(image):
         # Extrair a confiança (probabilidade associada à detecção)
         confianca = detections[0, 0, i, 2]
 
-        print(confianca)
+        if confianca > 0:
+            print(confianca)
         
         # Considerar detecções com confianca maior que 0.5
         if confianca > 0.5:
