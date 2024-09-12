@@ -39,9 +39,12 @@ def contains_face(image):
     proto_file = 'MobileNetSSD_deploy.prototxt'
     model_file = 'MobileNetSSD_deploy.caffemodel'
     net = cv2.dnn.readNetFromCaffe(proto_file, model_file)
+
+    # Converter a imagem PIL para um array do OpenCV
+    imagem = np.array(image)
+    # Converter o formato de cor (PIL usa RGB e OpenCV usa BGR)
+    imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)
     
-    # Carregar a imagem
-    imagem = image
     
     if imagem is None:
         print("Erro ao carregar a imagem.")
