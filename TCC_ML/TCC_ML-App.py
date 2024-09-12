@@ -35,17 +35,24 @@ val_transforms = Compose([
 pipe = model
 
 def contains_face(image):
-    # Carregar o classificador de detecção de face pré-treinado do OpenCV
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # Carregar o modelo pré-treinado de detecção de rosto DNN do OpenCV
+    net = cv2.dnn.readNetFromCaffe(cv2.data.dnn + 'deploy.prototxt', cv2.data.dnn + 'res10_300x300_ssd_iter_140000.caffemodel')
     
-    # Converter a imagem de RGB para escala de cinza
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    # Converter a imagem para o formato que o modelo espera
+    (h, w) = image.shape[:2]
+    blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
     
-    # Detectar rostos na imagem
-    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    # Passar a imagem pela rede
+    net.setInput(blob)
+    detections = net.forward()
     
-    # Se a lista de faces detectadas não estiver vazia, significa que a imagem contém uma face
-    return len(faces) > 0
+    # Verificar se algum rosto foi detectado
+    for i in range(0, detections.shape[2]):
+        confidence = detections[0, 0, i, 2]
+        if confidence > 0.5:  # Ajuste o limite de confiança conforme necessário
+            return True
+    
+    return False
 
 @app.route('/process_images', methods=['POST'])
 def process_image():
@@ -65,10 +72,10 @@ def process_image():
         # Passar o tensor processado pelo modelo
         with torch.no_grad():
 
-            image_cv = np.array(image)
-            image_cv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
+            #image_cv = np.array(image)
+            #image_cv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
 
-            if contains_face(image_cv):
+            if contains_face(image):
                 outputs = pipe(image_tensor)
                 logits = outputs.logits
                 predictions = torch.nn.functional.softmax(logits, dim=1)
