@@ -10,6 +10,7 @@ from torchvision.transforms import Normalize, Resize, ToTensor, Compose
 import torch
 import boto3
 import uuid
+import cv2
 
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas as rotas
