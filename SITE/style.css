@@ -133,6 +133,12 @@ body {
     position: relative;
 }
 
+.box-in {
+    background-color: #fff;
+    width: 100%;
+    position: relative;
+}
+
 button {
     display: block;
     width: 100%;

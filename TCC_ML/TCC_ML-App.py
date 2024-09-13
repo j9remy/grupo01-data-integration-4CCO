@@ -48,13 +48,13 @@ def contains_face(image):
 
     # Detecta os rostos na imagem
     faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    
+    if len(faces) > 0:
+        return True
+
     eyes = eye_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-    # Se a lista 'faces' não estiver vazia, há rostos na imagem
-    print(faces)
-    print(len(eyes))
-
-    return len(faces) > 0 or len(eyes) > 0
+    return len(eyes) > 2
 
 @app.route('/process_images', methods=['POST'])
 def process_image():

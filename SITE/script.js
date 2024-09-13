@@ -1,5 +1,6 @@
 const uploadBtn = document.getElementById('uploadBtn');
 const imageBox = document.getElementById('imageBox');
+const resultBox = document.getElementById('resultBox');
 
 uploadBtn.addEventListener('click', () => {
     const input = document.createElement('input');
@@ -51,7 +52,7 @@ function handleFiles(files) {
 }
 
 function displayResults(data) {
-    imageBox.innerHTML = '';  // Limpa a caixa de imagens
+    resultBox.innerHTML = '';  // Limpa a caixa de imagens
 
     if (data.results) {
         data.results.forEach((result, index) => {
@@ -60,7 +61,7 @@ function displayResults(data) {
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem');
-                imageBox.appendChild(img);
+                resultBox.appendChild(img);
     
                 // Criação das barras de progresso
                 const progressContainer = document.createElement('div');
@@ -72,18 +73,18 @@ function displayResults(data) {
                 progressContainer.appendChild(realProgress);
                 progressContainer.appendChild(fakeProgress);
     
-                imageBox.appendChild(progressContainer);
+                resultBox.appendChild(progressContainer);
             } else {
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem');
-                imageBox.appendChild(img);
+                resultBox.appendChild(img);
 
                 const notFaceContainer = document.createElement('div');
 
                 notFaceContainer.textContent = "Nenhuma face foi detectada na imagem.";
     
-                imageBox.appendChild(notFaceContainer);
+                resultBox.appendChild(notFaceContainer);
             }
             
         });
