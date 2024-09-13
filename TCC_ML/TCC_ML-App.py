@@ -11,6 +11,7 @@ import torch
 import boto3
 import uuid
 import cv2
+import requests
 
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas as rotas
@@ -63,12 +64,6 @@ def contains_face(image):
 def process_image():
     files = request.files.getlist('images')
     results = []
-    s3_client = boto3.client(
-        's3',
-        aws_access_key_id='ASIAVOGFJX3W3REFCQQX',
-        aws_secret_access_key='gwxZNTILuEq61mJSz3EzQxMoiYDm8yxaO5YTKo23',
-        region_name='us-east-1'
-    )
 
     for file in files:
         image = Image.open(file).convert("RGB")
@@ -103,13 +98,12 @@ def process_image():
 
                 name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
 
-                image_bytes.seek(0)
 
-                if conf_real>conf_fake:
-                    s3_client.upload_fileobj(image_bytes, 's3-tcc', f'real/{name_image}')
-
-                else:
-                    s3_client.upload_fileobj(image_bytes, 's3-tcc', f'fake/{name_image}')
+                #if conf_real>conf_fake:
+                #    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/{file_name}", data=image_bytes, headers=headers)
+                    
+                #else:
+                #    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/{file_name}", data=image_bytes, headers=headers)
                 
 
             else:
