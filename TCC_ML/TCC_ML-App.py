@@ -63,12 +63,11 @@ def contains_face(image):
 def process_image():
     files = request.files.getlist('images')
     results = []
-    session = boto3.Session(
-        aws_access_key_id='ASIAVOGFJX3W3REFCQQX',
-        aws_secret_access_key='gwxZNTILuEq61mJSz3EzQxMoiYDm8yxaO5YTKo23'
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id='SUA_ACCESS_KEY',
+        aws_secret_access_key='SUA_SECRET_KEY'
     )
-
-    s3 = session.resource('s3')
 
     for file in files:
         image = Image.open(file).convert("RGB")
@@ -104,11 +103,10 @@ def process_image():
                 name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
 
                 if conf_real>conf_fake:
-                    s3.put_object(Bucket='s3-tcc', Key=f'real/{name_image}', Body=encoded_image, ContentType='image/png')
+                    s3_client.upload_file(encoded_image, 's3-tcc', f'real/{name_image}')
 
                 else:
-                    s3.put_object(Bucket='s3-tcc', Key=f'fake/{name_image}', Body=encoded_image, ContentType='image/png')
-
+                    s3_client.upload_file(encoded_image, 's3-tcc', f'fake/{name_image}')
                 
 
             else:
