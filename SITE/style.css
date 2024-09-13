@@ -121,13 +121,13 @@ body {
     margin-bottom: 20px;
 }
 
-.imagem-result {
+/* .imagem-result {
     max-width: 100%;
     height: auto;
     margin-bottom: 20px;
     margin-top: 30px;
 
-}
+} */
 
 .box {
     background-color: #fff;
@@ -202,12 +202,12 @@ button:hover {
     }
 }
 
-.circular-chart {
+/* .circular-chart {
     display: inline-block;
     max-width: 120px;
     max-height: 120px;
     margin: 0 10px;
-}
+} */
 
 .circular-chart svg {
     width: 100%;
@@ -248,13 +248,39 @@ button:hover {
 
 .result-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  /* 3 ou 4 colunas automáticas */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));  /* Cria uma grid responsiva */
     gap: 20px;  /* Espaçamento entre os itens */
     justify-items: center;
     margin-top: 30px;
 }
 
-.imagem-result, .progress-container {
+.result-item {
+    display: flex;
+    flex-direction: column;  /* Mantém a imagem e gráficos em coluna */
+    align-items: center;  /* Centraliza a imagem e os gráficos */
     width: 100%;
-    max-width: 250px;
+    max-width: 300px;
 }
+
+.imagem-result {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.circular-chart {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 0 10px;  /* Espaço entre os gráficos de Real e Fake */
+}
+
+/* .label-text {
+    margin-top: 5px;  
+    text-align: center;
+} */
