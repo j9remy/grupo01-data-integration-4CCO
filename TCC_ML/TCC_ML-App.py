@@ -40,7 +40,7 @@ def contains_face(image):
         
 
     # Carrega o classificador Haar Cascade para detecção de rostos
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt_tree.xml')
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt2.xml')
     eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 
     # Converte a imagem para escala de cinza (necessário para o Haar Cascade)
@@ -48,15 +48,13 @@ def contains_face(image):
 
     # Detecta os rostos na imagem
     faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    eyes = eye_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
     
     print(len(faces))
+    print(len(eyes))
 
     if len(faces) > 0:
         return True
-
-    eyes = eye_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-    print(len(eyes))
 
     return len(eyes) > 2
 
