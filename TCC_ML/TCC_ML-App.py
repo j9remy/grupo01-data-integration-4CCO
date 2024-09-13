@@ -97,12 +97,13 @@ def process_image():
                 })
 
                 name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
+                file_path = BytesIO(image_bytes.getvalue())
 
                 if conf_real>conf_fake:
-                    s3.upload_file(encoded_image, 's3-tcc', f'real/{name_image}')
+                    s3.put_object(Bucket='s3-tcc', Key=f'real/{name_image}', Body=file_path, ContentType='image/png')
 
                 else:
-                    s3.upload_file(encoded_image, 's3-tcc', f'fake/{name_image}')
+                    s3.put_object(Bucket='s3-tcc', Key=f'fake/{name_image}', Body=file_path, ContentType='image/png')
 
                 
 
