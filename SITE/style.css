@@ -121,6 +121,14 @@ body {
     margin-bottom: 20px;
 }
 
+.imagem-result {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    margin-top: 30px;
+
+}
+
 .box {
     background-color: #fff;
     padding: 20px;
@@ -198,6 +206,7 @@ button:hover {
     display: inline-block;
     max-width: 120px;
     max-height: 120px;
+    margin: 0 10px;
 }
 
 .circular-chart svg {

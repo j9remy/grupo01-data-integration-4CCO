@@ -60,7 +60,7 @@ function displayResults(data) {
             if (result.contains_face){
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
-                img.classList.add('imagem');
+                img.classList.add('imagem-result');
                 resultBox.appendChild(img);
     
                 // Criação das barras de progresso
@@ -77,7 +77,7 @@ function displayResults(data) {
             } else {
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
-                img.classList.add('imagem');
+                img.classList.add('imagem-result');
                 resultBox.appendChild(img);
 
                 const notFaceContainer = document.createElement('div');
