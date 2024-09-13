@@ -249,7 +249,7 @@ button:hover {
 
 .result-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));  /* Cria uma grid responsiva */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  /* Cria uma grid responsiva */
     gap: 20px;  /* Espaçamento entre os itens */
     justify-items: center;
     margin-top: 30px;
