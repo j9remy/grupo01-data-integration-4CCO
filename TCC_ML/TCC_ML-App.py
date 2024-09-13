@@ -52,7 +52,7 @@ def contains_face(image):
 
     # Se a lista 'faces' não estiver vazia, há rostos na imagem
     print(faces)
-    print(eyes)
+    print(len(eyes))
 
     return len(faces) > 0 or len(eyes) > 0
 
