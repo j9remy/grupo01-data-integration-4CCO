@@ -64,7 +64,7 @@ def process_image():
     files = request.files.getlist('images')
     results = []
     session = boto3.Session(
-        aws_access_key_id='ASIAVOGFJX3W3REFCQQX'
+        aws_access_key_id='ASIAVOGFJX3W3REFCQQX',
         aws_secret_access_key='gwxZNTILuEq61mJSz3EzQxMoiYDm8yxaO5YTKo23'
     )
 
