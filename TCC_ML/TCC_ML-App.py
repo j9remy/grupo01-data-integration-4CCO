@@ -99,11 +99,11 @@ def process_image():
                 name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
 
 
-                #if conf_real>conf_fake:
-                #    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/{file_name}", data=image_bytes, headers=headers)
+                if conf_real>conf_fake:
+                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/real/{file_name}", data=image_bytes, headers=headers)
                     
-                #else:
-                #    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/{file_name}", data=image_bytes, headers=headers)
+                else:
+                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/fake/{file_name}", data=image_bytes, headers=headers)
                 
 
             else:
