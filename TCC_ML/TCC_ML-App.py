@@ -63,7 +63,7 @@ def contains_face(image):
 def process_image():
     files = request.files.getlist('images')
     results = []
-    #s3 = boto3.client('s3')
+    s3 = boto3.client('s3')
 
     for file in files:
         image = Image.open(file).convert("RGB")
@@ -96,13 +96,13 @@ def process_image():
                     'contains_face': True
                 })
 
-                #name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
+                name_image = f'{uuid.uuid4()}_{round(conf_real * 100)}_real_{round(conf_fake * 100)}_fake.png'
 
-                #if conf_real>conf_fake:
-                    #s3.upload_file(encoded_image, 's3-tcc', f'real/{name_image}')
+                if conf_real>conf_fake:
+                    s3.upload_file(encoded_image, 's3-tcc', f'real/{name_image}')
 
-                #else:
-                    #s3.upload_file(encoded_image, 's3-tcc', f'fake/{name_image}')
+                else:
+                    s3.upload_file(encoded_image, 's3-tcc', f'fake/{name_image}')
 
                 
 
