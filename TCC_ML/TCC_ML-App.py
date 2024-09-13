@@ -65,8 +65,8 @@ def process_image():
     results = []
     s3_client = boto3.client(
         's3',
-        aws_access_key_id='SUA_ACCESS_KEY',
-        aws_secret_access_key='SUA_SECRET_KEY'
+        aws_access_key_id='ASIAVOGFJX3W3REFCQQX',
+        aws_secret_access_key='gwxZNTILuEq61mJSz3EzQxMoiYDm8yxaO5YTKo23'
     )
 
     for file in files:
