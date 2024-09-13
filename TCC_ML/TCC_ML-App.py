@@ -100,10 +100,10 @@ def process_image():
 
 
                 if conf_real>conf_fake:
-                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/real/{file_name}", data=image_bytes, headers=headers)
+                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/real/{name_image}", data=image_bytes, headers=headers)
                     
                 else:
-                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/fake/{file_name}", data=image_bytes, headers=headers)
+                    response = requests.put(f"https://62w59q9a3b.execute-api.us-east-1.amazonaws.com/dev/s3-tcc/fake/{name_image}", data=image_bytes, headers=headers)
                 
 
             else:
