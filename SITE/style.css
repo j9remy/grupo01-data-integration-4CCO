@@ -244,3 +244,17 @@ button:hover {
     text-align: center;
 }
 
+
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  /* 3 ou 4 colunas automáticas */
+    gap: 20px;  /* Espaçamento entre os itens */
+    justify-items: center;
+    margin-top: 30px;
+}
+
+.imagem-result, .progress-container {
+    width: 100%;
+    max-width: 250px;
+}

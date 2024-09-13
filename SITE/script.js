@@ -53,15 +53,19 @@ function handleFiles(files) {
 
 function displayResults(data) {
     resultBox.innerHTML = '';  // Limpa a caixa de imagens
+    resultBox.classList.add('result-grid')
 
     if (data.results) {
         data.results.forEach((result, index) => {
-            // Criação da imagem a partir da string base64
+            
+            const resultItem = document.createElement('div');  // Contêiner para cada imagem + progresso
+            resultItem.classList.add('result-item');
+
             if (result.contains_face){
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem-result');
-                resultBox.appendChild(img);
+                resultItem.appendChild(img);
     
                 // Criação das barras de progresso
                 const progressContainer = document.createElement('div');
@@ -73,20 +77,20 @@ function displayResults(data) {
                 progressContainer.appendChild(realProgress);
                 progressContainer.appendChild(fakeProgress);
     
-                resultBox.appendChild(progressContainer);
+                resultItem.appendChild(progressContainer);
             } else {
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem-result');
-                resultBox.appendChild(img);
+                resultItem.appendChild(img);
 
                 const notFaceContainer = document.createElement('div');
 
                 notFaceContainer.textContent = "Nenhuma face foi detectada na imagem.";
     
-                resultBox.appendChild(notFaceContainer);
+                resultItem.appendChild(notFaceContainer);
             }
-            
+            resultBox.appendChild(resultItem);
         });
     } else {
         console.error('Invalid data format:', data);
