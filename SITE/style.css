@@ -137,7 +137,7 @@ body {
     text-align: center;
     min-height: 250px;
     width: 100%;
-    max-width: 300px;
+    /* max-width: 300px; */
     position: relative;
 }
 
@@ -164,6 +164,7 @@ button {
     font-size: 16px;
     font-weight: bold;
     transition: background-color 0.4s ease;
+    max-width: 400px;
 }
 
 button:hover {
@@ -263,9 +264,9 @@ button:hover {
 }
 
 .imagem-result {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 20px;
+    max-width: auto;
+    max-height: 250px;
+    margin-bottom: 16px;
 }
 
 .progress-container {
