@@ -41,15 +41,17 @@ def contains_face(image):
 
     # Carrega o classificador Haar Cascade para detecção de rostos
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt_tree.xml')
+    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml.xml')
 
     # Converte a imagem para escala de cinza (necessário para o Haar Cascade)
     gray_image = cv2.cvtColor(image_cv, cv2.COLOR_BGR2GRAY)
 
     # Detecta os rostos na imagem
     faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    eyes = eye_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
     # Se a lista 'faces' não estiver vazia, há rostos na imagem
-    return len(faces) > 0
+    return len(faces) > 0 or len(eyes) > 0
 
 @app.route('/process_images', methods=['POST'])
 def process_image():
