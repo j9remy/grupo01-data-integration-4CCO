@@ -35,54 +35,21 @@ val_transforms = Compose([
 pipe = model
 
 def contains_face(image):
-    # Carregar o modelo de detecção de rosto (deep learning)
-    proto_file = 'MobileNetSSD_deploy.prototxt'
-    model_file = 'MobileNetSSD_deploy.caffemodel'
-    net = cv2.dnn.readNetFromCaffe(proto_file, model_file)
-
-    # Converter a imagem PIL para um array do OpenCV
-    imagem = np.array(image)
-    
-    if imagem is None or imagem.size == 0:
-        print("Erro ao carregar a imagem.")
-        return False
-
-    # Converter o formato de cor (PIL usa RGB e OpenCV usa BGR)
-    imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)
-    
-    # Obter as dimensões da imagem
-    (h, w) = imagem.shape[:2]
-    
-    # Pré-processar a imagem: redimensionar para 300x300 e normalizar
-    blob = cv2.dnn.blobFromImage(imagem, 1.0, (300, 300), (104.0, 177.0, 123.0))
-    
-    # Passar o blob pela rede para obter detecções
-    net.setInput(blob)
-    detections = net.forward()
-    
-    # Verificar se as detecções estão presentes
-    if detections is None or detections.shape[2] == 0:
-        print("Nenhuma detecção foi realizada.")
-        return False
-    
-    # Percorrer todas as detecções
-    for i in range(0, detections.shape[2]):
-        # Extrair a confiança (probabilidade associada à detecção)
-        confianca = detections[0, 0, i, 2]
+    image_cv = np.array(image)
+    image_cv = cv2.cvtColor(image_cv, cv2.COLOR_RGB2BGR)
         
-        print(f"Confiança da detecção {i}: {confianca}")
-        
-        # Considerar detecções com confiança maior que 0.5
-        if confianca > 0.5:
-            # Computar as coordenadas da caixa delimitadora do rosto
-            box = detections[0, 0, i, 3:7] * [w, h, w, h]
-            (startX, startY, endX, endY) = box.astype("int")
-            
-            # Se houver um rosto detectado, retornar True
-            return True
-    
-    # Se nenhum rosto foi detectado, retornar False
-    return False
+
+    # Carrega o classificador Haar Cascade para detecção de rostos
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_alt.xml')
+
+    # Converte a imagem para escala de cinza (necessário para o Haar Cascade)
+    gray_image = cv2.cvtColor(image_cv, cv2.COLOR_BGR2GRAY)
+
+    # Detecta os rostos na imagem
+    faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+    # Se a lista 'faces' não estiver vazia, há rostos na imagem
+    return len(faces) > 0
 
 @app.route('/process_images', methods=['POST'])
 def process_image():
