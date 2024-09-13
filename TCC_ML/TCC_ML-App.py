@@ -53,7 +53,7 @@ def contains_face(image):
     print(len(faces))
     print(len(eyes))
 
-    if len(faces) > 0 and len(eyes) > 2:
+    if len(faces) > 0 and len(eyes) >= 2:
         return True
 
     return len(eyes) > 2
