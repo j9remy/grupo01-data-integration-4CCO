@@ -63,7 +63,12 @@ def contains_face(image):
 def process_image():
     files = request.files.getlist('images')
     results = []
-    s3 = boto3.client('s3')
+    session = boto3.Session(
+        aws_access_key_id='ASIAVOGFJX3W3REFCQQX'
+        aws_secret_access_key='gwxZNTILuEq61mJSz3EzQxMoiYDm8yxaO5YTKo23'
+    )
+
+    s3 = session.resource('s3')
 
     for file in files:
         image = Image.open(file).convert("RGB")
