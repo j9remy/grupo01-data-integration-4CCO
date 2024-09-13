@@ -53,7 +53,7 @@ function handleFiles(files) {
 
 function displayResults(data) {
     resultBox.innerHTML = '';  // Limpa a caixa de imagens
-    resultBox.classList.add('result-grid')
+    resultBox.classList.add('result-grid');
 
     if (data.results) {
         data.results.forEach((result, index) => {
@@ -61,35 +61,34 @@ function displayResults(data) {
             const resultItem = document.createElement('div');  // Contêiner para cada imagem + progresso
             resultItem.classList.add('result-item');
 
-            if (result.contains_face){
-                const img = document.createElement('img');
-                img.src = `data:image/png;base64,${result.image}`;
-                img.classList.add('imagem-result');
-                resultItem.appendChild(img);
-    
-                // Criação das barras de progresso
-                const progressContainer = document.createElement('div');
-                progressContainer.classList.add('progress-container');
-    
-                const realProgress = createCircularProgress(result.real_percentage, 'Real');
-                const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
-    
-                progressContainer.appendChild(realProgress);
-                progressContainer.appendChild(fakeProgress);
-    
-                resultItem.appendChild(progressContainer);
-            } else {
-                const img = document.createElement('img');
-                img.src = `data:image/png;base64,${result.image}`;
-                img.classList.add('imagem-result');
-                resultItem.appendChild(img);
+            const imageContainer = document.createElement('div');
+            imageContainer.classList.add('imagem-result-container');
 
+            const img = document.createElement('img');
+            img.src = `data:image/png;base64,${result.image}`;
+            img.classList.add('imagem-result');
+            imageContainer.appendChild(img);
+
+            resultItem.appendChild(imageContainer);
+    
+            // Criação das barras de progresso
+            const progressContainer = document.createElement('div');
+            progressContainer.classList.add('progress-container');
+    
+            const realProgress = createCircularProgress(result.real_percentage, 'Real');
+            const fakeProgress = createCircularProgress(result.fake_percentage, 'Fake');
+    
+            progressContainer.appendChild(realProgress);
+            progressContainer.appendChild(fakeProgress);
+    
+            resultItem.appendChild(progressContainer);
+
+            if (!result.contains_face) {
                 const notFaceContainer = document.createElement('div');
-
                 notFaceContainer.textContent = "Nenhuma face foi detectada na imagem.";
-    
                 resultItem.appendChild(notFaceContainer);
             }
+
             resultBox.appendChild(resultItem);
         });
     } else {

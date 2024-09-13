@@ -137,7 +137,7 @@ body {
     text-align: center;
     min-height: 250px;
     width: 100%;
-    /* max-width: 300px; */
+    min-width: 300px;
     position: relative;
 }
 
@@ -263,10 +263,16 @@ button:hover {
     max-width: 300px;
 }
 
-.imagem-result {
+/* .imagem-result {
     max-width: auto;
     max-height: 250px;
     margin-bottom: 16px;
+} */
+
+.imagem-result {
+    width: 100%;  /* Ocupa toda a largura do contêiner imagem-result-container */
+    height: 100%;  /* Ocupa toda a altura do contêiner imagem-result-container */
+    object-fit: cover;  /* Faz com que a imagem se ajuste ao tamanho do contêiner sem distorcer */
 }
 
 .progress-container {
@@ -285,3 +291,13 @@ button:hover {
     margin-top: 5px;  
     text-align: center;
 } */
+
+.imagem-result-container {
+    width: 100%;  /* Ocupa toda a largura do contêiner result-item */
+    height: 200px;  /* Defina uma altura fixa */
+    overflow: hidden;  /* Esconde a parte da imagem que ultrapassa o contêiner */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
