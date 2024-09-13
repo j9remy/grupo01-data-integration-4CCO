@@ -57,8 +57,6 @@ function displayResults(data) {
         data.results.forEach((result, index) => {
             // Criação da imagem a partir da string base64
             if (result.contains_face){
-                console.log("entrou")
-                alert("entrou")
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem');
@@ -76,8 +74,6 @@ function displayResults(data) {
     
                 imageBox.appendChild(progressContainer);
             } else {
-                console.log("errou")
-                alert("errou")
                 const img = document.createElement('img');
                 img.src = `data:image/png;base64,${result.image}`;
                 img.classList.add('imagem');
