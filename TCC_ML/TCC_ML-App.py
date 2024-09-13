@@ -42,13 +42,13 @@ def contains_face(image):
 
     # Converter a imagem PIL para um array do OpenCV
     imagem = np.array(image)
-    # Converter o formato de cor (PIL usa RGB e OpenCV usa BGR)
-    imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)
     
-    
-    if imagem is None:
+    if imagem is None or imagem.size == 0:
         print("Erro ao carregar a imagem.")
         return False
+
+    # Converter o formato de cor (PIL usa RGB e OpenCV usa BGR)
+    imagem = cv2.cvtColor(imagem, cv2.COLOR_RGB2BGR)
     
     # Obter as dimensões da imagem
     (h, w) = imagem.shape[:2]
@@ -60,15 +60,19 @@ def contains_face(image):
     net.setInput(blob)
     detections = net.forward()
     
+    # Verificar se as detecções estão presentes
+    if detections is None or detections.shape[2] == 0:
+        print("Nenhuma detecção foi realizada.")
+        return False
+    
     # Percorrer todas as detecções
     for i in range(0, detections.shape[2]):
         # Extrair a confiança (probabilidade associada à detecção)
         confianca = detections[0, 0, i, 2]
-
-        if confianca > 0:
-            print(confianca)
         
-        # Considerar detecções com confianca maior que 0.5
+        print(f"Confiança da detecção {i}: {confianca}")
+        
+        # Considerar detecções com confiança maior que 0.5
         if confianca > 0.5:
             # Computar as coordenadas da caixa delimitadora do rosto
             box = detections[0, 0, i, 3:7] * [w, h, w, h]
