@@ -107,7 +107,7 @@ body {
     margin: 0;
     font-size: 2rem;
     color: #02B676;
-    -webkit-text-stroke: 1px blac;
+    -webkit-text-stroke: 1px black;
 }
 
 .image-container {
@@ -137,7 +137,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     text-align: center;
-    min-height: 300px;
+    /* min-height: 300px; */
     width: 100%;
     min-width: 300px;
     position: relative;
@@ -238,16 +238,31 @@ button:hover {
     dominant-baseline: central;
 }
 
-/* teste */
 
+.circular-chart {
+    display: flex;
+    flex-direction: column; /* Alinha os elementos em coluna */
+    align-items: center;    /* Centraliza o conteúdo horizontalmente */
+    max-width: 100px;
+    max-height: 120px;
+    margin: 0 10px;
+}
 
 .label-text {
+    margin-top: 8px; /* Ajusta o espaço entre o círculo e o texto */
+    font-size: 1em;
+    color: #333;
+    text-align: center;
+    font-weight: bold; /* Mantém o texto destacado */
+}
+
+/* .label-text {
     margin-top: 10px; 
     font-size: 1.1em; 
     color: #333; 
     text-align: center;
     font-style: bold;
-}
+} */
 
 
 
@@ -279,11 +294,11 @@ button:hover {
     margin-top: 10px;
 }
 
-.circular-chart {
+/* .circular-chart {
     max-width: 100px;
     max-height: 100px;
-    margin: 0 10px;  /* Espaço entre os gráficos de Real e Fake */
-}
+    margin: 0 10px;  
+} */
 
 /* .label-text {
     margin-top: 5px;  
