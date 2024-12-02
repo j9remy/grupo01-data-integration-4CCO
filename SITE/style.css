@@ -123,6 +123,15 @@ body {
     margin-bottom: 20px;
 }
 
+.imagem-result {
+    width: 200px;       /* Define uma largura fixa */
+    height: 200px;      /* Define uma altura fixa */
+    object-fit: cover;  /* Garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 8px; /* (Opcional) Bordas arredondadas para um design mais elegante */
+    margin-bottom: 16px;
+    background-color: #f5f5f5; /* Cor de fundo para imagens que não ocupam todo o espaço */
+}
+
 /* .imagem-result {
     max-width: 100%;
     height: auto;
